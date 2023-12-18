@@ -1,0 +1,33 @@
+managed implementation in class zbp_agi_onlineshop unique;
+//strict ( 2 );
+
+define behavior for ZAGI_ONLINESHOP alias Online_Shop
+persistent table zag_onlineshop
+with additional save
+lock master
+authorization master ( instance )
+//etag master <field_name>
+{
+  field ( numbering : managed, readonly ) Order_Uuid;
+  field ( mandatory ) Ordereditem;
+  field ( readonly ) Creationdate, Order_Id;
+
+  determination calculate_order_id on modify { create; }
+  internal action create_pr parameter $self;
+  internal action set_inforecrod;
+  internal action update_inforecrod;
+
+  create;
+  update;
+  delete;
+
+  mapping for zag_onlineshop
+    {
+      PackageId    = pkgid;
+      Order_Id     = order_Id;
+      Creationdate = creationdate;
+      Deliverydate = deliverydate;
+      Order_Uuid   = order_Uuid;
+      Ordereditem  = Ordereditem;
+    }
+}
